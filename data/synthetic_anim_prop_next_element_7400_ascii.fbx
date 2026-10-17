@@ -1,0 +1,58 @@
+; FBX 7.4.0 project file
+FBXHeaderExtension:  {
+    FBXHeaderVersion: 1003
+    FBXVersion: 7400
+}
+Objects:  {
+    Model: 1, "Model::A", "Null" {
+        Properties70:  {
+            P: "Lcl Translation", "Lcl Translation", "", "A",1,2,3
+        }
+    }
+    Model: 2, "Model::B", "Null" {
+        Properties70:  {
+            P: "Lcl Translation", "Lcl Translation", "", "A",4,5,6
+        }
+    }
+    AnimationStack: 10, "AnimStack::Take1", "" {
+    }
+    AnimationLayer: 11, "AnimLayer::Layer1", "" {
+    }
+    AnimationCurveNode: 12, "AnimCurveNode::T", "" {
+        Properties70:  {
+            P: "d|X", "Number", "", "A",1
+            P: "d|Y", "Number", "", "A",2
+            P: "d|Z", "Number", "", "A",3
+        }
+    }
+    AnimationStack: 20, "AnimStack::Take2", "" {
+    }
+    AnimationLayer: 21, "AnimLayer::Layer2", "" {
+    }
+    AnimationCurveNode: 22, "AnimCurveNode::R", "" {
+        Properties70:  {
+            P: "d|X", "Number", "", "A",10
+            P: "d|Y", "Number", "", "A",0
+            P: "d|Z", "Number", "", "A",0
+        }
+    }
+    AnimationCurveNode: 23, "AnimCurveNode::T", "" {
+        Properties70:  {
+            P: "d|X", "Number", "", "A",7
+            P: "d|Y", "Number", "", "A",8
+            P: "d|Z", "Number", "", "A",9
+        }
+    }
+}
+Connections:  {
+    C: "OO",1,0
+    C: "OO",2,0
+    C: "OO",11,10
+    C: "OO",12,11
+    C: "OP",12,1, "Lcl Translation"
+    C: "OO",21,20
+    C: "OO",22,21
+    C: "OP",22,1, "Lcl Rotation"
+    C: "OO",23,21
+    C: "OP",23,2, "Lcl Translation"
+}

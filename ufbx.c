@@ -25808,7 +25808,9 @@ static ufbxi_noinline void ufbxi_evaluate_props(const ufbx_anim *anim, const ufb
 			// TODO: Should we skip the blending for the first layer _per property_
 			// This could be done by having `UFBX_PROP_FLAG_ANIMATION_EVALUATED`
 			// that gets set for the first layer of animation that is applied.
-			if (aprop->prop_name.data == prop->name.data) {
+			// The scans above stop at the end of `element`, so `aprop` may already point to the
+			// next element's properties: never evaluate another element's matching property.
+			if (aprop->element == element && aprop->prop_name.data == prop->name.data) {
 				ufbx_vec3 v = ufbx_evaluate_anim_value_vec3_flags(aprop->anim_value, time, flags);
 				if (layer_ix == 0) {
 					prop->value_vec3 = v;

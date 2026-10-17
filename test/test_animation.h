@@ -3899,3 +3899,30 @@ UFBXT_FILE_TEST_ALT(bake_constant_rotation, maya_anim_interpolation)
 	ufbx_free_baked_anim(bake);
 }
 #endif
+
+UFBXT_FILE_TEST(synthetic_anim_prop_next_element)
+#if UFBXT_IMPL
+{
+	// `A` animates `Lcl Translation` only in `Take1`, but has animated `Lcl Rotation` in `Take2`
+	// where the next element `B` animates `Lcl Translation`: `A` must not evaluate `B`'s value.
+	ufbx_node *node_a = ufbx_find_node(scene, "A");
+	ufbx_node *node_b = ufbx_find_node(scene, "B");
+	ufbxt_assert(node_a && node_b);
+
+	ufbx_anim_stack *take1 = ufbx_find_anim_stack(scene, "Take1");
+	ufbx_anim_stack *take2 = ufbx_find_anim_stack(scene, "Take2");
+	ufbxt_assert(take1 && take2);
+
+	ufbx_vec3 ref_a = { 1.0f, 2.0f, 3.0f };
+	ufbx_vec3 ref_b = { 4.0f, 5.0f, 6.0f };
+	ufbx_vec3 ref_b_anim = { 7.0f, 8.0f, 9.0f };
+
+	ufbxt_assert_close_vec3(err, ufbx_evaluate_prop(take1->anim, &node_a->element, "Lcl Translation", 0.0).value_vec3, ref_a);
+	ufbxt_assert_close_vec3(err, ufbx_evaluate_prop(take1->anim, &node_b->element, "Lcl Translation", 0.0).value_vec3, ref_b);
+	ufbxt_assert_close_vec3(err, ufbx_evaluate_prop(take2->anim, &node_a->element, "Lcl Translation", 0.0).value_vec3, ref_a);
+	ufbxt_assert_close_vec3(err, ufbx_evaluate_prop(take2->anim, &node_b->element, "Lcl Translation", 0.0).value_vec3, ref_b_anim);
+
+	ufbx_transform transform = ufbx_evaluate_transform(take2->anim, node_a, 0.0);
+	ufbxt_assert_close_vec3(err, transform.translation, ref_a);
+}
+#endif
